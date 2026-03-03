@@ -1,4 +1,4 @@
-/* ===== GLOBAL STYLES ===== */
+/* ===== GLOBAL ===== */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -12,17 +12,17 @@ h1 {
   font-size: 32px;
 }
 
-/* ===== HOME GRID ===== */
+/* ===== HOME GRID (MOBILE-FIRST) ===== */
 .months-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-  padding: 0 40px 40px;
+  grid-template-columns: repeat(1, 1fr); /* 1 columna por defecto */
+  gap: 12px;
+  padding: 0 15px 20px;
 }
 
 .month-card {
   background: white;
-  padding: 25px 10px;
+  padding: 20px 8px;
   border-radius: 16px;
   text-align: center;
   font-weight: bold;
@@ -32,7 +32,7 @@ h1 {
 }
 
 .month-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   background: #f8bbd0;
 }
 
@@ -40,35 +40,36 @@ h1 {
 .month-header {
   display: flex;
   align-items: center;
-  padding: 20px 40px;
+  padding: 15px 20px;
+  flex-wrap: wrap;
 }
 
 .back-btn {
-  font-size: 14px;
+  font-size: 12px;
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 10px;
   color: #555;
 }
 
 .month-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
 }
 
 /* ===== WEEKS ===== */
 .weeks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  padding: 0 40px 40px;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  padding: 0 15px 20px;
 }
 
 .week-card {
   background: white;
   border-radius: 18px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
@@ -115,8 +116,8 @@ h1 {
 
 /* ===== EXTRA TASKS ===== */
 .extra-tasks {
-  margin: 40px;
-  padding: 25px;
+  margin: 20px;
+  padding: 15px;
   background: white;
   border-radius: 20px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
@@ -128,7 +129,7 @@ h1 {
 
 .extra-item button {
   margin-top: 8px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -136,92 +137,63 @@ h1 {
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .months-grid {
-    grid-template-columns: repeat(4, 1fr);
-    padding: 0 30px 30px;
-    gap: 15px;
-  }
 
+/* Tablet pequeño */
+@media (min-width: 480px) {
+  .months-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .weeks-grid {
     grid-template-columns: repeat(2, 1fr);
-    padding: 0 30px 30px;
-    gap: 20px;
   }
 }
 
-@media (max-width: 768px) {
+/* Tablet grande */
+@media (min-width: 768px) {
   h1 {
-    font-size: 24px;
-    padding: 20px 0;
+    font-size: 28px;
+    padding: 25px 0;
   }
-
   .months-grid {
     grid-template-columns: repeat(3, 1fr);
-    padding: 0 20px 20px;
     gap: 15px;
+    padding: 0 20px 30px;
   }
-
   .weeks-grid {
-    grid-template-columns: 1fr;
-    padding: 0 20px 20px;
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 20px 30px;
   }
-
   .month-card, .week-card {
-    padding: 15px 10px;
-    font-size: 14px;
+    padding: 18px 10px;
+    font-size: 15px;
   }
-
-  .month-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-
   .month-title {
-    font-size: 20px;
-    margin-top: 10px;
-  }
-
-  .task-list li {
-    font-size: 13px;
-  }
-
-  .extra-tasks {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .extra-item button {
-    padding: 5px 10px;
-    font-size: 13px;
+    font-size: 22px;
   }
 }
 
-@media (max-width: 480px) {
+/* Desktop */
+@media (min-width: 1024px) {
   .months-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    padding: 0 40px 40px;
   }
-
-  .month-card, .week-card {
-    padding: 12px 8px;
-  }
-
-  .month-title {
-    font-size: 18px;
-  }
-
-  .back-btn {
-    font-size: 12px;
-  }
-
   .weeks-grid {
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 0 40px 40px;
   }
-
-  .task-list li {
-    font-size: 12px;
+  h1 {
+    font-size: 32px;
+    padding: 30px 0;
+  }
+  .month-card, .week-card {
+    padding: 25px 10px;
+    font-size: 16px;
+  }
+  .month-title {
+    font-size: 24px;
   }
 }
