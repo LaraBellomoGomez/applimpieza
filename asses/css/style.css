@@ -1,0 +1,141 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #fce4ec, #e3f2fd);
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 32px;
+}
+
+/* HOME GRID */
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  padding: 0 40px 40px;
+}
+
+.month-card {
+  background: white;
+  padding: 25px 10px;
+  border-radius: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.month-card:hover {
+  transform: translateY(-5px);
+  background: #f8bbd0;
+}
+
+/* MONTH VIEW */
+
+.month-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 40px;
+}
+
+.back-btn {
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 15px;
+  color: #555;
+}
+
+.month-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* WEEKS */
+
+.weeks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 0 40px 40px;
+}
+
+.week-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.week-number {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.week-dates {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.cleaning-person {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Person colors */
+
+.lara {
+  color: #d81b60;
+}
+
+.fabian {
+  color: #1e88e5;
+}
+
+/* Tasks */
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-list li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.task-list input {
+  margin-right: 6px;
+}
+
+/* EXTRA TASKS */
+
+.extra-tasks {
+  margin: 40px;
+  padding: 25px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.extra-item {
+  margin-top: 15px;
+}
+
+.extra-item button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #eee;
+}

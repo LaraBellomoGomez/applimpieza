@@ -1,0 +1,9 @@
+{
+  "name": "Roommate Cleaning Planner",
+  "short_name": "CleaningApp",
+  "start_url": "../../index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4d88ff",
+  "icons": []
+}
