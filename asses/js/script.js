@@ -9,7 +9,7 @@ const tasks = [
     "Clean furniture",
     "Clean mirrors",
     "Clean the living room",
-    "clean rags",
+    "Clean rags",
     "Vacuum the whole house"
 ];
 
