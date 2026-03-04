@@ -1,52 +1,84 @@
+const app = document.getElementById("app");
+
+const roommates = ["Lara", "Fabian"];
+const tasks = [
+  "Clean the kitchen",
+  "Clean the bathroom",
+  "Clean the couch",
+  "Clean furniture",
+  "Clean mirrors",
+  "Clean the living room",
+  "Clean rags",
+  "Vacuum the whole house"
+];
+
+let extraTasks = {
+  trash: "Lara",
+  recycling: "Fabian"
+};
+
+// Configurable: mínimo de días para mostrar la semana
+const MIN_DAYS_PER_WEEK = 3; // puedes poner 3, 4 o 5 según UX
+
+function generateHome() {
+  app.innerHTML = `
+    <div class="months-grid">
+      ${generateMonths()}
+    </div>
+    ${generateExtraTasks()}
+  `;
+}
+
+function generateMonths() {
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
+  return months.map((month, index) => `
+    <div class="month-card" onclick="openMonth(${index})">
+      ${month}
+    </div>
+  `).join("");
+}
+
 function openMonth(monthIndex) {
-    const year = 2026;
-    const firstDayOfMonth = new Date(year, monthIndex, 1);
-    const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
+  const year = 2026;
+  const firstDayOfMonth = new Date(year, monthIndex, 1);
+  const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
 
-    // Encontrar el lunes de la primera semana que incluye el primer día del mes
-    let currentMonday = new Date(firstDayOfMonth);
-    const dayOfWeek = currentMonday.getDay(); // 0 = domingo, 1 = lunes...
-    currentMonday.setDate(currentMonday.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  // Primer lunes que podría tocar el mes
+  let startDate = new Date(firstDayOfMonth);
+  const day = startDate.getDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day; // Domingo = retrocede 6 días
+  startDate.setDate(startDate.getDate() + diffToMonday);
 
-    let weekNumber = 1;
+  let weeksHTML = "";
+  let weekNumber = 1;
+  let cleaningIndex = getCleaningIndexForMonth(monthIndex);
 
-    // Determinar quién empieza
-    let cleaningIndex;
-    if (monthIndex < 2) {
-        cleaningIndex = 0; // Enero y Febrero: Lara empezó la primera semana
-    } else if (monthIndex === 2) {
-        cleaningIndex = 1; // Marzo: Fabian empieza porque Lara limpió la última de febrero
-    } else {
-        // Calcular total de semanas desde marzo
-        const weeksSinceMarch = getTotalWeeksSinceMarch(monthIndex);
-        cleaningIndex = (1 + weeksSinceMarch) % 2; // alterna según semanas transcurridas
-    }
+  while (startDate <= lastDayOfMonth) {
+    const weekStart = new Date(startDate);
+    const weekEnd = new Date(startDate);
+    weekEnd.setDate(weekEnd.getDate() + 6);
 
-    let weeksHTML = "";
+    // Calcular cuántos días de la semana pertenecen al mes
+    const effectiveStart = weekStart < firstDayOfMonth ? firstDayOfMonth : weekStart;
+    const effectiveEnd = weekEnd > lastDayOfMonth ? lastDayOfMonth : weekEnd;
+    const daysInMonth = (effectiveEnd - effectiveStart) / (1000*60*60*24) + 1;
 
-    while (currentMonday <= lastDayOfMonth) {
-        let weekStart = new Date(currentMonday);
-        let weekEnd = new Date(currentMonday);
-        weekEnd.setDate(weekEnd.getDate() + 6);
+    // Mostrar solo si la semana tiene >= MIN_DAYS_PER_WEEK días
+    if (daysInMonth >= MIN_DAYS_PER_WEEK) {
+      const person = roommates[cleaningIndex];
+      const personClass = person === "Lara" ? "lara" : "fabian";
 
-        // Mostrar solo los días dentro del mes
-        const displayStart = weekStart < firstDayOfMonth ? firstDayOfMonth : weekStart;
-        const displayEnd = weekEnd > lastDayOfMonth ? lastDayOfMonth : weekEnd;
-
-        const person = roommates[cleaningIndex];
-        const personClass = person === "Lara" ? "lara" : "fabian";
-
-        weeksHTML += `
+      weeksHTML += `
         <div class="week-card">
           <div class="week-number">Week ${weekNumber}</div>
           <div class="week-dates">
-            ${displayStart.getDate()} - ${displayEnd.getDate()}
+            ${effectiveStart.getDate()} - ${effectiveEnd.getDate()}
           </div>
-
-          <div class="cleaning-person ${personClass}">
-            🧹 Cleaning: ${person}
-          </div>
-
+          <div class="cleaning-person ${personClass}">🧹 Cleaning: ${person}</div>
           <ul class="task-list">
             ${tasks.map(task => `
               <li>
@@ -58,47 +90,71 @@ function openMonth(monthIndex) {
         </div>
       `;
 
-        cleaningIndex = cleaningIndex === 0 ? 1 : 0; // alternar personas
-        currentMonday.setDate(currentMonday.getDate() + 7); // siguiente lunes
-        weekNumber++;
+      cleaningIndex = cleaningIndex === 0 ? 1 : 0;
+      weekNumber++;
     }
 
-    app.innerHTML = `
+    startDate.setDate(startDate.getDate() + 7); // siguiente semana
+  }
+
+  app.innerHTML = `
     <div class="month-header">
       <button class="back-btn" onclick="generateHome()">← Back</button>
       <div class="month-title">
         ${firstDayOfMonth.toLocaleString("en-US", { month: "long" })} 2026
       </div>
     </div>
-
     <div class="weeks-grid">
       ${weeksHTML}
     </div>
   `;
 }
 
-// Calcular semanas transcurridas desde marzo hasta el mes actual
-function getTotalWeeksSinceMarch(monthIndex) {
-    let totalWeeks = 0;
-    const year = 2026;
+// Alternancia global de limpieza según semanas reales
+function getCleaningIndexForMonth(monthIndex) {
+  const year = 2026;
 
-    for (let m = 3; m < monthIndex; m++) { // desde abril (índice 3) hasta mes anterior
-        const firstDay = new Date(year, m, 1);
-        const lastDay = new Date(year, m + 1, 0);
+  // Marzo empieza con FABIAN (índice 1)
+  const marchFirst = new Date(year, 2, 1);
+  let baseMonday = new Date(marchFirst);
+  const day = baseMonday.getDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  baseMonday.setDate(baseMonday.getDate() + diffToMonday);
 
-        // Encontrar lunes del primer día del mes
-        let currentMonday = new Date(firstDay);
-        const dayOfWeek = currentMonday.getDay();
-        currentMonday.setDate(currentMonday.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  const currentMonthFirst = new Date(year, monthIndex, 1);
 
-        let weekCount = 0;
-        while (currentMonday <= lastDay) {
-            weekCount++;
-            currentMonday.setDate(currentMonday.getDate() + 7);
-        }
+  const diffTime = currentMonthFirst - baseMonday;
+  const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
 
-        totalWeeks += weekCount;
-    }
-
-    return totalWeeks;
+  return diffWeeks % 2 === 0 ? 1 : 0;
 }
+
+function generateExtraTasks() {
+  return `
+    <div class="extra-tasks">
+      <h2>Extra Tasks</h2>
+      <div class="extra-item">
+        Last person who took out the trash:
+        <strong>${extraTasks.trash}</strong><br>
+        <button onclick="switchTrash()">Switch</button>
+      </div>
+      <div class="extra-item">
+        Last person who took out recycling:
+        <strong>${extraTasks.recycling}</strong><br>
+        <button onclick="switchRecycling()">Switch</button>
+      </div>
+    </div>
+  `;
+}
+
+function switchTrash() {
+  extraTasks.trash = extraTasks.trash === "Lara" ? "Fabian" : "Lara";
+  generateHome();
+}
+
+function switchRecycling() {
+  extraTasks.recycling = extraTasks.recycling === "Lara" ? "Fabian" : "Lara";
+  generateHome();
+}
+
+generateHome();
