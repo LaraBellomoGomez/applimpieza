@@ -158,3 +158,23 @@ function switchRecycling() {
 }
 
 generateHome();
+
+// Al generar cada checkbox
+<ul class="task-list">
+  ${tasks.map((task, i) => {
+    const key = `${monthIndex}_${weekNumber}_${task}`;
+    const checked = localStorage.getItem(key) === "true" ? "checked" : "";
+    return `
+      <li>
+        <input type="checkbox" data-key="${key}" ${checked} onchange="saveTask(this)">
+        ${task}
+      </li>
+    `;
+  }).join("")}
+</ul>
+
+// Función para guardar el estado
+function saveTask(checkbox) {
+  const key = checkbox.dataset.key;
+  localStorage.setItem(key, checkbox.checked);
+}
